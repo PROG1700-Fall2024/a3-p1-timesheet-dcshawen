@@ -29,7 +29,7 @@ class Validator:
 
         return int(inputString)
         
-    def inputAndValidateFloat(outputString:str, errorString:str = defaultErrorString):
+    def inputAndValidateFloat(outputString:str, ensurePosition:bool = False, errorString:str = defaultErrorString):
         """ Forces user to enter a FLOAT before continuing. Returns a float. """
         while (inputString := Validator.validateFloat(input(outputString))) == None:
             print(errorString)    
