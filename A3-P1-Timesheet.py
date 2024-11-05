@@ -33,7 +33,7 @@ def outputResults(weekStats):
     print("Hours worked: {0}".format(weekStats.hours))
     print("Total hours worked: {0}".format(weekStats.totalHours))
     print("Average hours worked: {0}".format(weekStats.averageHours))
-    print("Days with insufficient hours worked: {0} with hours {1}".format(weekStats.insufficientHours[1], weekStats.insufficientHours[0]))
+    print("Days with insufficient hours worked: {0} with hours {1}".format(weekStats.insufficientHours[0], weekStats.insufficientHours[1]))
     print("Highest number of hours worked: {0} on days {1}".format(weekStats.highestHours[0], weekStats.highestHours[1]))
 
 def getInsufficientHours(hours:list[int]):
