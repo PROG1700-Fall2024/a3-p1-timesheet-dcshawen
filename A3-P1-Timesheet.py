@@ -40,33 +40,49 @@ def main():
     outputResults(weekStats)
 
 def outputMostHours(weekStats):
+    if weekStats.totalHours == 0:
+        print("You didn't work any hours this week.")
+        return
+    
     if (len(weekStats.highestHours[1]) > 1):
-        highestStr = "There were multiple days with the highest hours."
+        highestStr = "There were multiple days with the highest hours worked:"
+    elif (len(weekStats.highestHours[1]) == 0):
+        highestStr = "I don't think this line is even reachable through normal operations, Geoff, but I'm leaving it in just in case you find a way."
     else:
-        highestStr = "There was only one day with the highest hours worked."
+        highestStr = "There was only one day with the highest hours worked:"
     print(highestStr)
+
     for i in range(len(weekStats.highestHours[1])):
         print("Day {0}: {1} hours".format(weekStats.highestHours[1][i], str(weekStats.highestHours[0]).strip(".0")))
 
 def outputTotalHours(weekStats):
-    print("Total Number of Hours Worked: {0}".format(str(weekStats.totalHours).strip(".0")))
+    if weekStats.totalHours == 0:
+        print("Total Number of Hours Worked: {0:.0f}".format(weekStats.totalHours))
+    else:
+        print("Total Number of Hours Worked: {0}".format(str(weekStats.totalHours).strip(".0")))
 
 def outputAverageHours(weekStats):
     print("Average number of hours worked each day: {0:.1f}".format(weekStats.averageHours))
 
 def outputInsufficientHours(weekStats):
     if (len(weekStats.insufficientHours[0]) > 1):
-        insufficientStr = "There were multiple days with insufficient hours."
+        insufficientStr = "There were multiple days with insufficient hours worked:"
+    elif (len(weekStats.insufficientHours[0]) == 0):
+        insufficientStr = "All days had sufficient hours worked."
     else:
-        insufficientStr = "There was only one day with insufficient hours."    
+        insufficientStr = "There was only one day with insufficient hours worked:"    
     print(insufficientStr)
     for i in range(len(weekStats.insufficientHours[0])):
-        print("Day {0}: {1} hours".format(weekStats.insufficientHours[0][i], str(weekStats.insufficientHours[1][i]).strip(".0")))
+        if weekStats.insufficientHours[1][i] == 0:
+            print("Day {0}: {1:.0f} hours".format(weekStats.insufficientHours[0][i], weekStats.insufficientHours[1][i]))
+        else:
+            print("Day {0}: {1} hours".format(weekStats.insufficientHours[0][i], str(weekStats.insufficientHours[1][i]).strip(".0")))
 
 def outputResults(weekStats):
+
     """Outputs the results of the timesheet calculations"""
     resultStr = "Timesheet Results"
-    daysWorkedStr = "Summary of hours worked for the week"
+
     print(tower.Template.titleOut(resultStr))
 
     outputMostHours(weekStats)
