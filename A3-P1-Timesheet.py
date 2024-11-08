@@ -21,20 +21,12 @@ class WeekStats:
 
 def main():
     title = "Timesheet Calculator"
-    instr = "To calculate your timesheet, first enter the number of days you worked this week (Default 5 if nothing is entered)."
-
+    instr = "To calculate your timesheet, enter the number of hours you worked each day of a 5 day work week."
     # Outputs the MOTD using ds_tower's Template class
     print(tower.Template.titleOut(title))
     print(instr)
-    while (dayCount := tower.Validator.inputAndValidateInt(tower.PROMPT, "Invalid Input", [None])) > MAX_DAYS:
-        print("Invalid input. Please enter a number between 1 and {0}".format(MAX_DAYS))
-    
-    if dayCount == 0:
-        print("Then why are you here?")
-        exit()
-        
-    instr = "Next, enter the number of hours you worked each day."
-    hours = getHoursForWeek(dayCount)
+       
+    hours = getHoursForWeek()
     weekStats = WeekStats(hours, getMaxHours(hours), getTotalHours(hours), getAverageHours(hours), getInsufficientHours(hours))
 
     outputResults(weekStats)
