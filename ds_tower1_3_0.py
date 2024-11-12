@@ -4,7 +4,7 @@
     Desc: Contains custom math and validation functions
 """
 
-PROMPT = "> "
+PROMPT = ">: "
 
 class Validator:
     """ Custom math functions """

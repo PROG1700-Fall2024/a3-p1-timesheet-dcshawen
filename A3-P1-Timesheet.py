@@ -11,13 +11,60 @@ MAX_DAYS = 7
 INS_THRESH = 7
 
 class WeekStats:
+
+
     # Passing 5 variables around as local variables one-by-one was getting cumbersome so I encapsulated them into a WeekStats object so I can just move that
-    def __init__(self, hours:list[int], highestHours:list[list], totalHours:int, averageHours:int, insufficientHours:list[list]):
+    def __init__(self, hours:list[int]):
         WeekStats.hours = hours
-        WeekStats.highestHours = highestHours
-        WeekStats.totalHours = totalHours
-        WeekStats.averageHours = averageHours
-        WeekStats.insufficientHours = insufficientHours
+        WeekStats.highestHours = WeekStats.setHighestHours(self, hours)
+        WeekStats.totalHours = WeekStats.setTotalHours(self, hours)
+        WeekStats.averageHours = WeekStats.setAverageHours(self, hours)
+        WeekStats.insufficientHours = WeekStats.setInsufficientHours(self, hours)
+
+    def setHighestHours(self, hours):
+        """Returns the highest number of hours worked in a week, and a list of the days that number was worked"""
+        """
+            I'm keeping the loop in this time in place of the list comprehension because I have to hit those assignment outcomes somewhere
+            
+            But I'd strongly rather use:
+                days = [x for x in range(1, len(hours) + 1) if hours[x - 1] == highest]
+
+        """
+        days = []
+        highest = max(hours)
+        for i in range(len(hours)):
+            if hours[i] == highest:
+                days.append(i + 1)
+
+        return highest, days
+    
+    def setTotalHours(self, hours):
+        """Returns the total number of hours worked in a week"""
+        return sum(hours)
+    
+    def setAverageHours(self, hours):
+        """Returns the average number of hours worked in a week"""
+        return (sum(hours) / len(hours))
+    
+    def setInsufficientHours(self, hours):
+        """Returns a list of hours worked that are less than 7"""
+        """
+            NOTE First time using List Comprehension! I learned something new. I know this is the loops & lists assignment but this is too slick not to use.
+            Although I guess List Comprehension is sort of a loop on its own, so I'll defend the usage with that.
+            
+            Just for posterity though, the normal loop would have been something like:
+        
+        def getInsufficientHours(hours:list[int]):
+            for i in range(len(hours)):
+                if hours[i] < 7:
+                    days.append(i + 1)
+                    hours.append(hours[i])
+            return [ days, hours ]
+        """
+        insufficientHours = [[x for x in range(1, len(hours) + 1) if hours[x - 1] < INS_THRESH], # First list stores the days with insufficient hours
+                            [x for x in hours if x < INS_THRESH]]                               # Second list stores the hours worked on those days
+
+        return insufficientHours
 
 def main():
     title = "Timesheet Calculator"
@@ -27,7 +74,7 @@ def main():
     print(instr)
        
     hours = getHoursForWeek()
-    weekStats = WeekStats(hours, getMaxHours(hours), getTotalHours(hours), getAverageHours(hours), getInsufficientHours(hours))
+    weekStats = WeekStats(hours)
 
     outputResults(weekStats)
 
@@ -45,10 +92,13 @@ def outputMostHours(weekStats):
     print(highestStr)
 
     for i in range(len(weekStats.highestHours[1])):
-        print("Day {0}: {1} hours".format(weekStats.highestHours[1][i], str(weekStats.highestHours[0]).strip(".0")))
+        if weekStats.highestHours[0] % 10 == 0:
+            print("Day {0}: {1:.0f} hours".format(weekStats.highestHours[1][i], weekStats.highestHours[0]))
+        else:
+            print("Day {0}: {1} hours".format(weekStats.highestHours[1][i], str(weekStats.highestHours[0]).strip(".0")))
 
 def outputTotalHours(weekStats):
-    if weekStats.totalHours == 0:
+    if weekStats.totalHours == 0 or weekStats.totalHours % 10 == 0:
         print("Total Number of Hours Worked: {0:.0f}".format(weekStats.totalHours))
     else:
         print("Total Number of Hours Worked: {0}".format(str(weekStats.totalHours).strip(".0")))
@@ -71,7 +121,6 @@ def outputInsufficientHours(weekStats):
             print("Day {0}: {1} hours".format(weekStats.insufficientHours[0][i], str(weekStats.insufficientHours[1][i]).strip(".0")))
 
 def outputResults(weekStats):
-
     """Outputs the results of the timesheet calculations"""
     resultStr = "Timesheet Results"
 
@@ -83,49 +132,6 @@ def outputResults(weekStats):
     outputAverageHours(weekStats)
     print(tower.Template.getLine('-'))
     outputInsufficientHours(weekStats)
-
-def getInsufficientHours(hours:list[int]):
-    """Returns a list of hours worked that are less than 7"""
-    """
-        NOTE First time using List Comprehension! I learned something new. I know this is the loops & lists assignment but this is too slick not to use.
-        Although I guess List Comprehension is sort of a loop on its own, so I'll defend the usage with that.
-        
-        Just for posterity though, the normal loop would have been something like:
-    
-    def getInsufficientHours(hours:list[int]):
-        for i in range(len(hours)):
-            if hours[i] < 7:
-                days.append(i + 1)
-                hours.append(hours[i])
-        return [ days, hours ]
-    """
-    insufficientHours = [[x for x in range(1, len(hours) + 1) if hours[x - 1] < INS_THRESH], # First list stores the days with insufficient hours
-                         [x for x in hours if x < INS_THRESH]]                               # Second list stores the hours worked on those days
-
-    return insufficientHours
-
-def getTotalHours(hours:list[int]):
-    return sum(hours)
-
-def getAverageHours(hours:list[int]):
-    return (sum(hours) / len(hours))
-
-def getMaxHours(hours:list[int]):
-    """Returns the highest number of hours worked in a week, and a list of the days that number was worked"""
-    """
-        I'm keeping the loop in this time in place of the list comprehension because I have to hit those assignment outcomes somewhere
-        
-        But I'd strongly rather use:
-            days = [x for x in range(1, len(hours) + 1) if hours[x - 1] == highest]
-
-    """
-    days = []
-    highest = max(hours)
-    for i in range(len(hours)):
-        if hours[i] == highest:
-            days.append(i + 1)
-
-    return highest, days
 
 def getHoursForWeek(daysPerWeek:int = 5):
     """Returns a list of hours worked for each day of the week, using daysPerWeek as the length of your work week"""
