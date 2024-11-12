@@ -11,8 +11,6 @@ MAX_DAYS = 7
 INS_THRESH = 7
 
 class WeekStats:
-
-
     # Passing 5 variables around as local variables one-by-one was getting cumbersome so I encapsulated them into a WeekStats object so I can just move that
     def __init__(self, hours:list[int]):
         WeekStats.hours = hours
@@ -28,7 +26,6 @@ class WeekStats:
             
             But I'd strongly rather use:
                 days = [x for x in range(1, len(hours) + 1) if hours[x - 1] == highest]
-
         """
         days = []
         highest = max(hours)
@@ -92,7 +89,7 @@ def outputMostHours(weekStats):
     print(highestStr)
 
     for i in range(len(weekStats.highestHours[1])):
-        if weekStats.highestHours[0] % 10 == 0:
+        if weekStats.highestHours[0] % 10 == 0: # Checks for trailing 0s before the decimal place. Relying on only .strip() was producing some weird results
             print("Day {0}: {1:.0f} hours".format(weekStats.highestHours[1][i], weekStats.highestHours[0]))
         else:
             print("Day {0}: {1} hours".format(weekStats.highestHours[1][i], str(weekStats.highestHours[0]).strip(".0")))
