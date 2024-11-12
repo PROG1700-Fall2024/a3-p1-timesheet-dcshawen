@@ -11,29 +11,13 @@ MAX_DAYS = 7
 INS_THRESH = 7
 
 class WeekStats:
-    # Passing 5 variables around as local variables one-by-one was getting cumbersome so I encapsulated them into a WeekStats object so I can just move that
+    # Passing 5 variables around as local variables one-by-one was cumbersome so I encapsulated them into a WeekStats object so I can just move that
     def __init__(self, hours:list[int]):
         WeekStats.hours = hours
         WeekStats.highestHours = WeekStats.setHighestHours(self, hours)
         WeekStats.totalHours = WeekStats.setTotalHours(self, hours)
         WeekStats.averageHours = WeekStats.setAverageHours(self, hours)
         WeekStats.insufficientHours = WeekStats.setInsufficientHours(self, hours)
-
-    def setHighestHours(self, hours):
-        """Returns the highest number of hours worked in a week, and a list of the days that number was worked"""
-        """
-            I'm keeping the loop in this time in place of the list comprehension because I have to hit those assignment outcomes somewhere
-            
-            But I'd strongly rather use:
-                days = [x for x in range(1, len(hours) + 1) if hours[x - 1] == highest]
-        """
-        days = []
-        highest = max(hours)
-        for i in range(len(hours)):
-            if hours[i] == highest:
-                days.append(i + 1)
-
-        return highest, days
     
     def setTotalHours(self, hours):
         """Returns the total number of hours worked in a week"""
@@ -62,6 +46,22 @@ class WeekStats:
                             [x for x in hours if x < INS_THRESH]]                               # Second list stores the hours worked on those days
 
         return insufficientHours
+    
+    def setHighestHours(self, hours):
+        """Returns the highest number of hours worked in a week, and a list of the days that number was worked"""
+        """
+            I'm keeping the loop in this time in place of the list comprehension because I have to hit those assignment outcomes somewhere
+            
+            But I'd strongly rather use:
+                days = [x for x in range(1, len(hours) + 1) if hours[x - 1] == highest]
+        """
+        days = []
+        highest = max(hours)
+        for i in range(len(hours)):
+            if hours[i] == highest:
+                days.append(i + 1)
+
+        return highest, days
 
 def main():
     title = "Timesheet Calculator"

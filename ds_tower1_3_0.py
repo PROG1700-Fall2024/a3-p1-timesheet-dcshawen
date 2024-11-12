@@ -47,4 +47,4 @@ class Template:
     
     def getLine(c:str = "*"):
         """ Prints a line of characters """
-        return (c * 80)
+        return (c * 50)
