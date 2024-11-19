@@ -18,16 +18,14 @@ class Validator:
             return None
 
     def validateInt(inputQuery:str):
-        """ Validates whether inputQuery is a valid INT. Returns converted INT if successful. Returns None if fails. """
-        
+        """ Validates whether inputQuery is a valid INT. Returns converted INT if successful. Returns None if fails. """        
         try:
             return int(inputQuery)
         except:
             return None
 
     def inputAndValidateInt(outputString:str, errorString:str = defaultErrorString):
-        """ Forces user to enter a INT value before continuing. Returns an integer. """
-        
+        """ Forces user to enter a INT value before continuing. Returns an integer. """        
         while (inputString := Validator.validateInt(input(outputString))) == None:
             print(errorString)
 
